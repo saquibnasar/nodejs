@@ -8,6 +8,14 @@ const PORT = 3000;
 // Middlewares
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  console.log("Middleware 1");
+  console.log(req.headers);
+  res.setHeader("x-Name", "Saquib");
+  next();
+});
+
 // Routes
 app.get("/users", (req, res) => {
   const html = `
@@ -46,7 +54,7 @@ app.post("/api/users", (req, res) => {
   const body = req.body;
   users.push({ ...body, id: users.length + 1 });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-    return res.json({ status: "success", id: users.length });
+    return res.status(201).json({ status: "success", id: users.length });
   });
 });
 
